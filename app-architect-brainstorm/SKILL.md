@@ -4,15 +4,19 @@ description: >
   Collaborative application architecture design through Socratic brainstorming.
   Produces complete architecture specification packages: domain models, UML database diagrams,
   layered architecture blueprints, component specifications, technology stack recommendations,
-  and architecture decision records. Covers all application archetypes: web apps, mobile apps,
+  architecture decision records, and UI/UX design prototypes (static HTML mockup pages).
+  Covers all application archetypes: web apps, mobile apps,
   API-only services, ML/inference APIs, desktop, real-time systems, CLI tools.
   Framework-agnostic and language-agnostic — the stack emerges from requirements.
-  This skill produces SPECIFICATIONS AND DIAGRAMS ONLY. It does not generate source code,
-  boilerplate files, or executable artifacts. The output is a comprehensive architecture
+  This skill produces SPECIFICATIONS, DIAGRAMS, AND STATIC HTML DESIGN MOCKUPS ONLY.
+  It does not generate production source code, boilerplate files, or executable artifacts.
+  HTML mockups are design artifacts (one self-contained page per key screen), never
+  production front-end code. The output is a comprehensive architecture
   document package that serves as the blueprint for implementation.
   Triggers on: architecture, system design, database modeling, clean architecture, DDD,
   tech stack selection, project structuring, how to structure my app, design my backend,
-  plan my architecture, model my domain.
+  plan my architecture, model my domain, UI design, UX design, mockup, prototype,
+  wireframe, design my frontend, design my screens.
 license: MIT
 ---
 
@@ -35,9 +39,11 @@ Collaborative architecture design through structured Socratic brainstorming. Age
 | Component Specification | Markdown | Per-component responsibilities and interfaces |
 | Architecture Contract | Markdown | Machine-verifiable rules for the project |
 | Guardian Checklist | Markdown | Validation rules to prevent architectural drift |
+| UI/UX Design Package | Static HTML pages | One self-contained mockup per key screen + user flows, screen inventory, design tokens |
 
 **What this skill does NOT produce:**
 - ❌ Source code files (`.ts`, `.py`, `.go`, etc.)
+- ❌ Production front-end code (React/Vue/Angular components, CSS frameworks, build setups) — HTML mockups are static design artifacts, the ONLY exception
 - ❌ Configuration files (`package.json`, `Dockerfile`, etc.)
 - ❌ Executable scripts
 - ❌ Boilerplate projects
@@ -62,6 +68,7 @@ Phase 1: Domain Discovery     → Business model, entities, constraints, archety
 Phase 2: Stack Selection      → Language, frameworks, databases (evidence-based)
 Phase 3: Database Modeling    → ER diagram (Mermaid), relations, access patterns
 Phase 4: Architecture Design  → Layers, components, services, API design
+Phase 4.6: UI/UX Design       → User flows, design tokens, static HTML mockups (UI archetypes only)
 Phase 5: Architecture Package → All specs consolidated, ADRs, guardian contract
 ```
 
@@ -325,6 +332,32 @@ Every repository has a mapper: `toDomain(row)` and `toPersistence(entity)`.
 
 ---
 
+## Phase 4.6: UI/UX Design via HTML Prototypes
+
+**Applies to**: all archetypes with a human interface (web, mobile, desktop, real-time). Skip for API-only and CLI archetypes — state why and substitute payload examples or interaction transcripts.
+
+UI/UX is a first-class architecture deliverable, not decoration. The interface layer cannot be specified without knowing what users actually see and do.
+
+### The 5 Steps
+
+1. **D1 — UX Discovery**: users, context, real data density, brand, accessibility, languages, 3-7 key screens. Runs alongside Phase 1 questions.
+2. **D2 — User flows**: Mermaid flowchart of the critical journey + screen inventory table with per-screen states and priorities.
+3. **D3 — Design tokens**: colors, typography, spacing, radius as CSS custom properties, with WCAG AA contrast stated.
+4. **D4 — HTML mockups**: one self-contained `.html` file per key screen + an `index.html` gallery. Realistic fake data in the product's real language (NEVER lorem ipsum). Empty / loading / error / success states for every P0 screen. Semantic HTML, one obvious primary action per screen, mobile-first.
+5. **D5 — Review loop**: user clicks through the gallery, iterate BEFORE finalizing the package. UX findings often change the API contract.
+
+### Hard Boundaries
+
+- HTML mockups are **design artifacts, not production code**: no framework, no build step, no API calls, no reusable component system.
+- They are the ONLY code-like artifact this skill produces.
+- The implementation team rebuilds them in the chosen stack; mockup markup is a reference, not a starting codebase.
+
+Reference: [references/ui-ux-design.md](references/ui-ux-design.md) — **read in full before running this phase.**
+
+**Output**: `design/` folder (`index.html` + `screen-<name>.html` per key screen), user flow diagram, screen inventory, design tokens table, UX decision notes feeding the API contract.
+
+---
+
 ## Phase 5: Architecture Package
 
 ### Deliverables to Produce
@@ -336,6 +369,7 @@ Every repository has a mapper: `toDomain(row)` and `toPersistence(entity)`.
 5. **Stack Decision Record**: Justified choices with rejected alternatives
 6. **ADR files** (from template): One per significant decision
 7. **Architecture Contract**: Machine-verifiable rules for the project
+8. **UI/UX Design Package** (UI archetypes only): HTML mockups gallery, user flows, screen inventory, design tokens
 8. **Guardian Checklist**: Rules to prevent drift during implementation
 
 ### Architecture Contract
@@ -371,6 +405,9 @@ Provide the implementation team with:
 | **No API versioning** | "When this contract changes, what happens to existing consumers?" |
 | **Missing idempotency** | "If this operation runs twice, is the result the same?" |
 | **Cache without invalidation** | "How do you know when to invalidate?" |
+| **UI designed with lorem ipsum** | "Show me the real longest value. Does the layout survive it?" |
+| **No empty/error states** | "Zero items is the FIRST thing a new user sees. What does the API-down screen look like?" |
+| **UX skipped for a UI archetype** | "You specified an interface layer without knowing what users see. Mock the key screens first." |
 
 ## Reference Loading Guide
 
@@ -380,6 +417,7 @@ Provide the implementation team with:
 - **Stack selection**: `references/stack-selection-trees.md` — Language/framework/DB decision trees
 - **Database patterns**: `references/database-modeling-uml.md` — Mermaid ER syntax, 7 advanced patterns, normalization
 - **Archetype patterns**: `references/archetype-patterns.md` — Per-archetype architecture models
+- **UI/UX design**: `references/ui-ux-design.md` — UX discovery questions, user flows, design tokens, static HTML mockup rules, review loop. **Read before Phase 4.6.**
 - **Implementation guidance**: `references/development-guardian.md` — Feature evolution patterns, regression prevention
 
 ### Reverse Engineering References (Mode B — Existing Codebase)
