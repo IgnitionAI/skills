@@ -342,8 +342,8 @@ UI/UX is a first-class architecture deliverable, not decoration. The interface l
 
 1. **D1 — UX Discovery**: users, context, real data density, brand, accessibility, languages, 3-7 key screens. Runs alongside Phase 1 questions.
 2. **D2 — User flows**: Mermaid flowchart of the critical journey + screen inventory table with per-screen states and priorities.
-3. **D3 — Design tokens**: colors, typography, spacing, radius as CSS custom properties, with WCAG AA contrast stated.
-4. **D4 — HTML mockups**: one self-contained `.html` file per key screen + an `index.html` gallery. Realistic fake data in the product's real language (NEVER lorem ipsum). Empty / loading / error / success states for every P0 screen. Semantic HTML, one obvious primary action per screen, mobile-first.
+3. **D3 — Design tokens**: full token set (surfaces, text, accent, severity, typography, spacing, radius) as CSS custom properties, with WCAG AA contrast stated. The `:root` token block is byte-identical across all mockup files — it IS the design system.
+4. **D4 — HTML mockups**: one self-contained `.html` file per key screen + an `index.html` gallery. Each screen file opens with a contract header comment (route, purpose, component inventory, states, data shown) so the mockup doubles as a build spec. Realistic fake data in the product's real language (NEVER lorem ipsum; include the longest realistic value). Empty / loading / error / success states for every P0 screen. Semantic HTML, one obvious primary action per screen, mobile-first at 390px by default.
 5. **D5 — Review loop**: user clicks through the gallery, iterate BEFORE finalizing the package. UX findings often change the API contract.
 
 ### Hard Boundaries
@@ -352,7 +352,7 @@ UI/UX is a first-class architecture deliverable, not decoration. The interface l
 - They are the ONLY code-like artifact this skill produces.
 - The implementation team rebuilds them in the chosen stack; mockup markup is a reference, not a starting codebase.
 
-Reference: [references/ui-ux-design.md](references/ui-ux-design.md) — **read in full before running this phase.**
+Reference: [references/ui-ux-design.md](references/ui-ux-design.md) — **read in full before running this phase**, together with [references/ui-patterns.md](references/ui-patterns.md) (viewport doctrine, shell and screen patterns, density rules, visual contract).
 
 **Output**: `design/` folder (`index.html` + `screen-<name>.html` per key screen), user flow diagram, screen inventory, design tokens table, UX decision notes feeding the API contract.
 
@@ -418,6 +418,7 @@ Provide the implementation team with:
 - **Database patterns**: `references/database-modeling-uml.md` — Mermaid ER syntax, 7 advanced patterns, normalization
 - **Archetype patterns**: `references/archetype-patterns.md` — Per-archetype architecture models
 - **UI/UX design**: `references/ui-ux-design.md` — UX discovery questions, user flows, design tokens, static HTML mockup rules, review loop. **Read before Phase 4.6.**
+- **UI pattern catalog**: `references/ui-patterns.md` — viewport doctrine, app shell and screen patterns, dashboard doctrine, density rules, visual hierarchy, visual contract for machine-consumable mockups. **Read with ui-ux-design.md at Step D3.**
 - **Implementation guidance**: `references/development-guardian.md` — Feature evolution patterns, regression prevention
 
 ### Reverse Engineering References (Mode B — Existing Codebase)

@@ -93,33 +93,38 @@ flowchart LR
 
 ## Step D3: Design Tokens
 
-Define the visual system as a **tokens table** BEFORE mocking screens. Tokens are captured as CSS custom properties inside each mockup.
+Define the visual system as a **tokens table** BEFORE mocking screens. Tokens are captured as CSS custom properties inside each mockup, in a `:root` block that is **identical across all mockup files** — drift between files is a defect, the token block IS the design system.
 
-| Token | Value | Rationale |
-|-------|-------|-----------|
-| `--color-primary` | ... | Brand / trust / action |
-| `--color-surface` | ... | Background hierarchy |
-| `--color-danger` | ... | Errors, destructive actions |
-| `--font-body` | ... | Readability for the content type |
-| `--font-size-base` | 16px minimum | Accessibility |
-| `--space-unit` | 4px or 8px grid | Consistent rhythm |
-| `--radius` | ... | Personality: sharp = serious, round = friendly |
+Minimum token set:
+
+| Token group | Tokens | Rationale |
+|-------------|--------|-----------|
+| Surfaces | `--surface-1/2/3`, `--border` | Background hierarchy without shadow soup |
+| Text | `--text-primary/secondary/muted` | 3 levels max — hierarchy by weight and size, not 12 grays |
+| Accent | `--accent`, `--accent-fg` | ONE accent, interactive elements only |
+| Severity | `--success`, `--warning`, `--danger` (+ `-fg` variants) | One vocabulary app-wide: badges, dots, banners |
+| Typography | `--font-body`, `--font-mono`, sizes {12, 14, 16, 20, 24} | 4–5 sizes max; body ≥16px for accessibility |
+| Spacing | `--space-{1..6}` = {4, 8, 12, 16, 24, 32, 48}px | 4px base unit; no arbitrary values |
+| Radius | `--radius-sm/md` (6/10) + `--radius-pill` (999) | One scale, applied consistently |
 
 Rules:
-- **Contrast**: body text must pass WCAG AA (4.5:1). State the checked ratio.
-- **Typography scale**: max 3-4 sizes. More = chaos.
+- **Contrast**: body text must pass WCAG AA (4.5:1). State the checked ratio for each text/background pair.
 - **One accent color** for primary actions. If everything is highlighted, nothing is.
+- **Dark mode**: if required (decided in D1), define a parallel semantic token set (`--surface-*` remap, same accent) and state whether mockups are delivered in both modes or light-first.
 - Justify each choice against the user's emotional context from D1 (a trading terminal and a children's app do not share tokens).
+
+**Load the pattern catalog**: read [ui-patterns.md](ui-patterns.md) before mocking — it defines viewport doctrine, shell patterns, screen skeletons, density rules, and the visual contract.
 
 ## Step D4: HTML Mockups
 
 ### File Rules
 
 - **One `.html` file per screen**, named `screen-<name>.html`, plus an `index.html` gallery linking all screens.
-- **Fully self-contained**: all CSS inline in `<style>`, no build step, no external dependencies (optional: one CDN font link).
-- **Realistic fake data**: real-length names, plausible numbers, actual French/English copy as appropriate. NEVER lorem ipsum — lorem ipsum hides layout-breaking content.
+- **Fully self-contained**: all CSS inline in `<style>`, no build step, no external dependencies (optional: one CDN font link). The `:root` token block is byte-identical in every file.
+- **Contract header**: every screen file opens with an HTML comment listing route, purpose, component inventory (named blocks), states included, and the data each block shows — an implementer must be able to build the screen from this file alone (see "The Visual Contract" in [ui-patterns.md](ui-patterns.md)).
+- **Realistic fake data**: real-length names, plausible numbers, actual French/English copy as appropriate. NEVER lorem ipsum — lorem ipsum hides layout-breaking content. Include the **longest realistic value**, not the average one.
 - **No framework, no logic**: no React, no Tailwind build, no fetch calls. Minimal inline JS allowed ONLY for preview interactions (tab switching, modal open) — never for business logic.
-- **Mobile-first**: design at the primary viewport first (state which: 375px mobile or 1440px desktop), then verify the other breakpoint does not collapse.
+- **Mobile-first**: design at 390px first (default), then verify 1440px gains a shell rather than stretching. State the primary viewport in the contract header.
 
 ### UX Rules (non-negotiable)
 
@@ -160,6 +165,11 @@ Rules:
 | **Everything is a modal** | "Modals interrupt. Which of these deserve a real page?" |
 | **Accessibility as afterthought** | "Contrast fails AA. Your users literally cannot read this." |
 | **Copying a framework demo** | "That's a generic dashboard template. What does YOUR user need first?" |
+| **Purple-gradient "AI look"** | "Gradients on large surfaces, glassmorphism, glow — name the brand reason or remove it." |
+| **Cards inside cards** | "Count the nested surfaces. Above two, the hierarchy is noise — flatten with borders and spacing." |
+| **KPI decoration** | "Which decision does this number drive? None? Delete the card." |
+| **Desktop table shrunk to mobile** | "Four-plus columns at 390px is unreadable. Cards now, columns at desktop." |
+| **Average-length fake data** | "Show me the row with 'Rapport trimestriel d'activité du pôle R&D 2026'. Survives? Good." |
 | **Design before flows** | "You styled a screen before mapping the journey. What screen comes before it?" |
 
 ## Output and Handoff
@@ -183,10 +193,13 @@ Handoff contract for the implementation team:
 - [ ] UX discovery questions answered (users, context, real data, references, a11y, languages)
 - [ ] Critical journey mapped as Mermaid flowchart
 - [ ] Screen inventory with priorities and states
-- [ ] Design tokens defined with WCAG AA contrast stated
+- [ ] Full token set defined (surfaces, text, accent, severity, type, spacing, radius) with WCAG AA contrast stated
+- [ ] Token `:root` block byte-identical across all mockup files
 - [ ] `index.html` gallery + one self-contained file per P0 screen
+- [ ] Contract header (route, purpose, component inventory, states, data) at the top of every screen file
 - [ ] Empty / loading / error / success states for every P0 screen
-- [ ] Realistic data in the product's real language — zero lorem ipsum
-- [ ] Mobile viewport verified (or explicitly out of scope with justification)
+- [ ] Realistic data in the product's real language — zero lorem ipsum, longest realistic value included
+- [ ] Mobile viewport 390px designed first; 1440px verified to gain a shell, not stretch
+- [ ] Mobile bottom tabs ↔ desktop sidebar map 1:1 (same destinations, order, labels)
 - [ ] User reviewed the gallery and iterations are applied
 - [ ] UX decisions impacting architecture recorded (ADR or API contract update)
