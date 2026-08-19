@@ -1,22 +1,15 @@
 ---
 name: app-architect-brainstorm
 description: >
-  Collaborative application architecture design through Socratic brainstorming.
-  Produces complete architecture specification packages: domain models, UML database diagrams,
-  layered architecture blueprints, component specifications, technology stack recommendations,
-  architecture decision records, and UI/UX design prototypes (static HTML mockup pages).
-  Covers all application archetypes: web apps, mobile apps,
-  API-only services, ML/inference APIs, desktop, real-time systems, CLI tools.
-  Framework-agnostic and language-agnostic — the stack emerges from requirements.
-  This skill produces SPECIFICATIONS, DIAGRAMS, AND STATIC HTML DESIGN MOCKUPS ONLY.
-  It does not generate production source code, boilerplate files, or executable artifacts.
-  HTML mockups are design artifacts (one self-contained page per key screen), never
-  production front-end code. The output is a comprehensive architecture
-  document package that serves as the blueprint for implementation.
-  Triggers on: architecture, system design, database modeling, clean architecture, DDD,
-  tech stack selection, project structuring, how to structure my app, design my backend,
-  plan my architecture, model my domain, UI design, UX design, mockup, prototype,
-  wireframe, design my frontend, design my screens.
+  Design greenfield or existing application architecture through Socratic
+  brainstorming. Produces framework-agnostic specification packages with domain
+  models, database and architecture diagrams, API and component contracts,
+  stack decisions, ADRs, product-truth contracts, guardian rules, and static HTML
+  UI/UX mockups. Covers web, mobile, API, ML, desktop, real-time, CLI, and data
+  systems. Use for architecture, system design, database modeling, DDD, stack
+  selection, project structure, reverse engineering, UI/UX flows, mockups, or
+  prototypes. Produces specifications and static design artifacts only, never
+  production code, boilerplate, configuration, or executable projects.
 license: MIT
 ---
 
@@ -38,6 +31,7 @@ Collaborative architecture design through structured Socratic brainstorming. Age
 | Architecture Decision Records | Markdown | ADR-xxx for each significant decision |
 | Component Specification | Markdown | Per-component responsibilities and interfaces |
 | Architecture Contract | Markdown | Machine-verifiable rules for the project |
+| Product Truth Contract | Markdown | Observable critical journey, runtime topology, failure signals, and future E2E proof |
 | Guardian Checklist | Markdown | Validation rules to prevent architectural drift |
 | UI/UX Design Package | Static HTML pages | One self-contained mockup per key screen + user flows, screen inventory, design tokens |
 
@@ -65,6 +59,7 @@ When the user has no existing codebase — designing a new application.
 
 ```
 Phase 1: Domain Discovery     → Business model, entities, constraints, archetype
+Phase 1.5: Product Truth      → Observable outcome contract and required runtime topology
 Phase 2: Stack Selection      → Language, frameworks, databases (evidence-based)
 Phase 3: Database Modeling    → ER diagram (Mermaid), relations, access patterns
 Phase 4: Architecture Design  → Layers, components, services, API design
@@ -80,6 +75,7 @@ When the user provides an existing codebase — analyze, document, and plan migr
 Phase R1: Codebase Discovery     → Understand what exists (files, deps, patterns)
 Phase R2: Architecture Mapping   → Map files to layers (or identify no layers)
 Phase R3: Violation Detection    → Find anti-patterns, coupling, leaks
+Phase R3.5: Product Truth        → Reconstruct the real runnable journey and its topology
 Phase R4: Architecture Blueprint → Produce diagrams of the AS-IS state
 Phase R5: Migration Plan         → Roadmap to TO-BE Clean Architecture
 ```
@@ -137,6 +133,8 @@ Challenge the domain understanding before any technical decision:
 8. **"What is the scale in 6 months? Users, requests/day, data volume?"**
 9. **"What is the team size and experience?"**
 10. **"What is the budget for infrastructure?"**
+11. **"What exact sentence may we say only when the product truly works?"**
+12. **"What is the first meaningful action after the initial screen or response?"**
 
 ### Step 1C: Extract the Domain Model
 
@@ -150,6 +148,31 @@ From answers, identify:
 **Output**: Domain specification document with validated archetype, entities, constraints.
 
 Reference: [references/brainstorming-method.md](references/brainstorming-method.md)
+
+---
+
+## Phase 1.5: Product Truth Contract
+
+Architecture quality and product success are separate claims. Before selecting
+the stack, define one Product Truth Contract per P0 critical journey:
+
+- actor and intended starting state;
+- exact trigger, observable outcome, and first meaningful continuation;
+- complete required runtime topology (UI, APIs, workers, stores, queues,
+  assets, auth, external systems, configuration);
+- concrete failure signals;
+- forbidden substitutes such as mocks, manual database edits, hidden setup,
+  skipped services, or product-specific patches outside the intended workflow;
+- one planned deterministic E2E test that can fail on the user's exact symptom;
+- a same-scenario parity bar when a reference product is named.
+
+Trace every required topology item to a component and operational owner in the
+later architecture. This phase produces a specification only and must end in
+state `architected`, never `product_verified`.
+
+When available, use `product-truth-gate` during implementation and validation
+to execute this contract. The architecture package must remain usable without
+that skill by containing the full contract itself.
 
 ---
 
@@ -369,8 +392,9 @@ Reference: [references/ui-ux-design.md](references/ui-ux-design.md) — **read i
 5. **Stack Decision Record**: Justified choices with rejected alternatives
 6. **ADR files** (from template): One per significant decision
 7. **Architecture Contract**: Machine-verifiable rules for the project
-8. **UI/UX Design Package** (UI archetypes only): HTML mockups gallery, user flows, screen inventory, design tokens
-8. **Guardian Checklist**: Rules to prevent drift during implementation
+8. **Product Truth Contract**: P0 journey, topology, failure signals, forbidden substitutes, planned E2E proof
+9. **UI/UX Design Package** (UI archetypes only): HTML mockups gallery, user flows, screen inventory, design tokens
+10. **Guardian Checklist**: Rules to prevent architectural and product-proof drift during implementation
 
 ### Architecture Contract
 
@@ -391,6 +415,9 @@ Provide the implementation team with:
 - Verification commands (grep patterns to check layer boundaries)
 
 **Note**: The guardian validates the implementation against this architecture contract. It does not generate code.
+It must also reject completion claims whose Product Truth Contract has not been
+executed at the required proof level; architecture checks cannot substitute for
+that future runtime evidence.
 
 ---
 
@@ -408,6 +435,9 @@ Provide the implementation team with:
 | **UI designed with lorem ipsum** | "Show me the real longest value. Does the layout survive it?" |
 | **No empty/error states** | "Zero items is the FIRST thing a new user sees. What does the API-down screen look like?" |
 | **UX skipped for a UI archetype** | "You specified an interface layer without knowing what users see. Mock the key screens first." |
+| **Internal-green means product-done** | "Which Product Truth Contract proves the critical journey and its first meaningful continuation?" |
+| **Single component for a multi-service journey** | "Which required API, worker, store, asset, auth, or external dependency is being skipped?" |
+| **Screenshot or HTTP 200 as E2E proof** | "Could this evidence pass while the next user action, API call, or asset still fails?" |
 
 ## Reference Loading Guide
 

@@ -20,6 +20,30 @@
 - {Metric 1}
 - {Metric 2}
 
+## 2.1 Product Truth Contract
+
+| Field | Decision |
+|-------|----------|
+| Contract ID | `PTC-001` |
+| Product claim | {Exact sentence allowed only when the journey passes} |
+| Required proof level | {L4 product outcome / L5 reference parity} |
+| Actor and starting state | {Role, repository/data/auth/environment} |
+| Trigger | {Exact user action or request} |
+| Observable outcome | {Visible or consumer-visible result} |
+| Critical continuation | {First meaningful action after initial success} |
+| Required topology | {UI, API, workers, stores, assets, auth, external systems} |
+| Failure signals | {Conditions that make the gate fail} |
+| Forbidden substitutes | {Mocks, manual setup, skipped services, one-off patches} |
+| Planned evidence command | {Deterministic E2E test capable of reproducing the failure} |
+| Reference and parity bar | {If applicable: identical scenario and allowed differences} |
+
+### Journey Traceability
+| Step | Required component/data | Observable assertion | Failure diagnostic |
+|------|-------------------------|----------------------|--------------------|
+| {1} | {...} | {...} | {...} |
+
+**Architecture-phase state:** `architected` — runtime verification belongs to implementation and validation.
+
 ## 3. Domain Model
 ### Core Entities
 ```mermaid

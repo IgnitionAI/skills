@@ -7,6 +7,25 @@ This checklist prevents the agent from generating "pragmatic" code that bypasses
 
 ---
 
+## Section 0: Product Truth Contract
+
+Before accepting the architecture package, verify that every P0 journey has a
+Product Truth Contract containing:
+
+- an exact product claim, actor, intended starting state, trigger, observable
+  outcome, and first meaningful continuation;
+- the complete required runtime topology, including APIs, workers, stores,
+  assets, auth, external systems, and configuration where applicable;
+- explicit failure signals and forbidden substitutes;
+- one planned deterministic E2E proof that can fail on the user's exact symptom;
+- a same-scenario parity bar when a reference product is named.
+
+The architecture package must label this evidence state `architected`. Static
+mockups, diagrams, guardian checks, and internal tests must never be described
+as `product_verified`.
+
+---
+
 ## Section A: Folder Structure Compliance
 
 Verify the generated folders match the required architecture exactly:
