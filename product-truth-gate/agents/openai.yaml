@@ -1,0 +1,4 @@
+interface:
+  display_name: "Product Truth Gate"
+  short_description: "Prove real product outcomes before declaring done"
+  default_prompt: "Use $product-truth-gate to define and verify the real user outcome before declaring this work complete."
