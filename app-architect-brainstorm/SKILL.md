@@ -39,6 +39,10 @@ Collaborative architecture design through structured Socratic brainstorming. Age
 | Component Specification | Markdown | Per-component responsibilities and interfaces |
 | Architecture Contract | Markdown | Machine-verifiable rules for the project |
 | Guardian Checklist | Markdown | Validation rules to prevent architectural drift |
+| Persistent Context Index | Markdown | Lightweight index for future agents (`docs/context/README.md`) |
+| AS-IS Snapshot | Markdown | Current-state baseline (`docs/context/current-state.md`) |
+| Decisions Archive | Markdown | ADRs + stack decision record + guardrails (`docs/context/decisions/`) |
+| Plans Archive | Markdown | Active vs archived plans (`docs/context/plans/active/` + `archived/`) |
 | UI/UX Design Package | Static HTML pages | One self-contained mockup per key screen + user flows, screen inventory, design tokens |
 
 **What this skill does NOT produce:**
@@ -78,10 +82,10 @@ When the user provides an existing codebase — analyze, document, and plan migr
 
 ```
 Phase R1: Codebase Discovery     → Understand what exists (files, deps, patterns)
-Phase R2: Architecture Mapping   → Map files to layers (or identify no layers)
-Phase R3: Violation Detection    → Find anti-patterns, coupling, leaks
-Phase R4: Architecture Blueprint → Produce diagrams of the AS-IS state
-Phase R5: Migration Plan         → Roadmap to TO-BE Clean Architecture
+Phase R2: Architecture Mapping   → Map files to layers (or identify no layers); cross-check with passing tests when available
+Phase R3: Violation Detection    → Find anti-patterns, coupling, leaks; validate suspected violations using source + tests (ground truth)
+Phase R4: Architecture Blueprint → Produce diagrams of the AS-IS state and write a concise summary to `docs/context/current-state.md`
+Phase R5: Migration Plan         → Roadmap to TO-BE Clean Architecture; split next steps into `docs/context/plans/active/` and completed/obsolete steps into `docs/context/plans/archived/`
 ```
 
 **Trigger phrases for Mode B:**
@@ -99,8 +103,48 @@ Phase R5: Migration Plan         → Roadmap to TO-BE Clean Architecture
 - User pastes directory structure → **Mode B**
 
 ---
+## Phase 0: Complexity Detection (Trivial / Feature / Architectural)
+
+To avoid producing a heavy “architecture package” for every request, classify the incoming change request before running any expensive workflow.
+
+### Classify the change
+
+- **Trivial** — small fixes or edits that do **not** change architectural boundaries:
+  - no new bounded contexts / no new layers
+  - no major refactor of folder/layer responsibilities
+  - no meaningful DB schema/modeling change
+  - no new ADR-level decision needed
+- **Feature** — a user-visible feature added within existing architectural boundaries:
+  - may add new domain entities/use cases, but follows existing patterns
+  - no stack change (language/framework/DB) and no new major boundaries
+  - DB modeling changes are local and mapped to existing persistence patterns
+- **Architectural** — changes that reshape or re-justify the architecture:
+  - new/changed bounded contexts, major layer boundary changes, or cross-cutting design
+  - significant domain remodeling that affects core invariants
+  - stack/technology shifts (including ORM/DB choices) or deployment model changes
+  - high architectural drift risk (multiple teams, long-lived code ownership)
+
+### Output policy (proportional and durable)
+
+- **Always** update the lightweight durable context index:
+  - `docs/context/README.md` (generated from `assets/templates/docs-context-readme-template.md`)
+- Then decide how deep to go:
+  - **Trivial / Feature** → do **not** run the full architecture workflow.
+    - Update/produce: `docs/context/current-state.md` (generated from `assets/templates/docs-context-current-state-template.md`; ground-truth delta)
+    - Add/adjust: `docs/context/plans/active/*` (only concrete next steps)
+    - Add/adjust: `docs/context/decisions/*` only when a new architectural decision is truly required
+  - **Architectural** → run the full workflow (Phases 1 → 5) and also produce:
+    - **AS-IS**: what we observe today (`docs/context/current-state.md`)
+    - **DECISIONS**: rationale and guardrails (`docs/context/decisions/*`)
+    - **PLANS**: implementation/migration steps (`docs/context/plans/active/*` + `archived/*`)
+
+**Ground truth rule (especially Mode B):** treat **source code + tests** as implementation truth when mapping AS-IS and validating violations.
+
+---
 
 ## Phase 1: Domain Discovery
+
+Run Phases 1 → 5 only when the Complexity Detection phase classifies the request as **Architectural**. For **Trivial / Feature**, skip heavy phases and only update `docs/context/*`.
 
 ### Step 1A: Identify the Product Archetype
 
@@ -281,11 +325,11 @@ Reference: [references/archetype-patterns.md](references/archetype-patterns.md)
 
 ---
 
-## Phase 4.5: Architecture Rules — NON NEGOTIABLE
+## Phase 4.5: Architecture Rules — Contextual Guidance
 
-Before finalizing, these rules are absolute:
+Before finalizing, treat these rules as **defaults**. Adapt them to the selected complexity and the evidence you have:
 
-### Rule 1: The Folder Structure Is the Architecture
+### Rule 1: The Folder Structure Is the Default Architecture
 
 ```
 src/
@@ -310,6 +354,10 @@ src/
     └── validators/       ← Request validation
 ```
 
+**Guidance by complexity:**
+- **Architectural work** (or greenfield): enforce the default structure.
+- **Trivial / Feature** or **reverse engineering**: keep changes minimal—only adjust what’s needed to preserve layer responsibilities and prevent drift.
+
 ### Rule 2: Domain Entities Are NOT Database Schemas
 
 Entities are classes with behavior. ORM models are infrastructure adapters with mappers.
@@ -322,13 +370,13 @@ Entities are classes with behavior. ORM models are infrastructure adapters with 
 
 1. Validate input DTO → 2. Fetch entities → 3. Call domain methods → 4. Save → 5. Publish events → 6. Return DTO
 
-### Rule 5: Dependency Injection Is Mandatory
+### Rule 5: Prefer Dependency Injection
 
-Constructor injection everywhere. No `new` inside methods.
+Prefer constructor injection for new/changed code. For reverse engineering and small scope, document the existing composition and avoid forcing a full refactor.
 
-### Rule 6: The Mapper Pattern Is Mandatory
+### Rule 6: Prefer the Mapper Pattern
 
-Every repository has a mapper: `toDomain(row)` and `toPersistence(entity)`.
+For new persistence logic, ensure mappings exist: `toDomain(row)` and `toPersistence(entity)`.
 
 ---
 
@@ -366,15 +414,28 @@ Reference: [references/ui-ux-design.md](references/ui-ux-design.md) — **read i
 2. **ER Diagram**: Mermaid `erDiagram` with all tables
 3. **Architecture Blueprint**: Mermaid diagrams (layers, components, sequences)
 4. **API Contract**: Endpoint table with methods, DTOs, error codes
-5. **Stack Decision Record**: Justified choices with rejected alternatives
-6. **ADR files** (from template): One per significant decision
-7. **Architecture Contract**: Machine-verifiable rules for the project
+5. **Stack Decision Record**: Justified choices with rejected alternatives (store in `docs/context/decisions/stack-decision-record.md`)
+6. **ADR files** (from template): One per significant decision (store in `docs/context/decisions/ADR-xxx.md`)
+7. **Architecture Contract**: Machine-verifiable rules for the project (store in `docs/context/decisions/ARCHITECTURE_CONTRACT.md`)
 8. **UI/UX Design Package** (UI archetypes only): HTML mockups gallery, user flows, screen inventory, design tokens
-8. **Guardian Checklist**: Rules to prevent drift during implementation
+9. **Guardian Checklist**: Rules to prevent drift during implementation (store in `docs/context/decisions/guardian-checklist.md`)
+10. **Lightweight persistent context index**: `docs/context/README.md` (from `assets/templates/docs-context-readme-template.md`)
+11. **AS-IS summary**: `docs/context/current-state.md`
+12. **DECISIONS**: `docs/context/decisions/` (decisions made now; rationales + guardrails)
+13. **PLANS**: `docs/context/plans/active/*` and `docs/context/plans/archived/*` (active vs completed steps)
+
+### Plans: Active vs Archived
+
+- Put **next concrete work** (what should happen next) under `docs/context/plans/active/`.
+- Once a plan item is completed, invalidated, or superseded, move it under `docs/context/plans/archived/` (do not delete history).
+- Each plan item should include:
+  - what it changes (AS-IS evidence / related ADRs)
+  - success criteria / verification notes (prefer tests where available)
+  - estimated effort and dependencies (if any)
 
 ### Architecture Contract
 
-Generate `ARCHITECTURE_CONTRACT.md` specifying:
+Generate `docs/context/decisions/ARCHITECTURE_CONTRACT.md` specifying:
 - Forbidden import rules per layer
 - Required folder structure
 - Naming conventions
@@ -386,7 +447,7 @@ Reference template: [assets/ARCHITECTURE_CONTRACT.md](assets/ARCHITECTURE_CONTRA
 ### Guardian System for Implementation Phase
 
 Provide the implementation team with:
-- `assets/VALIDATION-CHECKLIST.md` — 10-point validation checklist
+- `assets/VALIDATION-CHECKLIST.md` — 10-point validation checklist (store under `docs/context/decisions/guardian-checklist.md`)
 - `references/development-guardian.md` — Feature evolution patterns
 - Verification commands (grep patterns to check layer boundaries)
 
