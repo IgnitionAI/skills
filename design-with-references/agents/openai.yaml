@@ -1,0 +1,4 @@
+interface:
+  display_name: "Design with References"
+  short_description: "Références visuelles, design cohérent et finition UI"
+  default_prompt: "Utilise $design-with-references pour améliorer cette interface à partir de mes inspirations et vérifier le rendu sur ordinateur et mobile."
