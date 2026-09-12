@@ -1,0 +1,154 @@
+{
+  "scope": "21 leçons pédagogiques WebGPU/TSL, hors page de conclusion The End",
+  "method": "Lecture complète du texte rendu via session Chrome autorisée ; travail réparti entre quatre agents. Longueurs et dernières sections consignées pendant la lecture. Aucun texte brut de cours conservé dans ce pack.",
+  "total_text_characters": 647987,
+  "lessons": [
+    {
+      "url": "https://threejs-journey.com/lessons/webgpu-tsl/introduction-to-webgpu-tsl",
+      "text_characters": 26368,
+      "last_section_read": "Conclusion 47:40",
+      "status": "texte_integral_lu",
+      "date": "2026-09-12"
+    },
+    {
+      "url": "https://threejs-journey.com/lessons/webgpu-tsl/node-materials",
+      "text_characters": 17236,
+      "last_section_read": "Importing TSL 39:44",
+      "status": "texte_integral_lu",
+      "date": "2026-09-12"
+    },
+    {
+      "url": "https://threejs-journey.com/lessons/webgpu-tsl/variables-and-references",
+      "text_characters": 13079,
+      "last_section_read": "References > Material references",
+      "status": "texte_integral_lu",
+      "date": "2026-09-12"
+    },
+    {
+      "url": "https://threejs-journey.com/lessons/webgpu-tsl/tools-and-debug",
+      "text_characters": 12198,
+      "last_section_read": "Internal tools > Tweaker UI",
+      "status": "texte_integral_lu",
+      "date": "2026-09-12"
+    },
+    {
+      "url": "https://threejs-journey.com/lessons/webgpu-tsl/math",
+      "text_characters": 8113,
+      "last_section_read": "Procedural nodes 12:45",
+      "status": "texte_integral_lu",
+      "date": "2026-09-12"
+    },
+    {
+      "url": "https://threejs-journey.com/lessons/webgpu-tsl/textures",
+      "text_characters": 11646,
+      "last_section_read": "Colors > hue()",
+      "status": "texte_integral_lu",
+      "date": "2026-09-12"
+    },
+    {
+      "url": "https://threejs-journey.com/lessons/webgpu-tsl/uniforms-and-attributes",
+      "text_characters": 9179,
+      "last_section_read": "Attributes 18:35",
+      "status": "texte_integral_lu",
+      "date": "2026-09-12"
+    },
+    {
+      "url": "https://threejs-journey.com/lessons/webgpu-tsl/node-functions",
+      "text_characters": 26807,
+      "last_section_read": "Conclusion 41:59",
+      "status": "texte_integral_lu",
+      "date": "2026-09-12"
+    },
+    {
+      "url": "https://threejs-journey.com/lessons/webgpu-tsl/patterns",
+      "text_characters": 26201,
+      "last_section_read": "Conclusion",
+      "status": "texte_integral_lu",
+      "date": "2026-09-12"
+    },
+    {
+      "url": "https://threejs-journey.com/lessons/webgpu-tsl/coffee-smoke",
+      "text_characters": 15568,
+      "last_section_read": "Conclusion",
+      "status": "texte_integral_lu",
+      "date": "2026-09-12"
+    },
+    {
+      "url": "https://threejs-journey.com/lessons/webgpu-tsl/post-processing",
+      "text_characters": 56926,
+      "last_section_read": "Conclusion",
+      "status": "texte_integral_lu",
+      "date": "2026-09-12"
+    },
+    {
+      "url": "https://threejs-journey.com/lessons/webgpu-tsl/shield",
+      "text_characters": 54340,
+      "last_section_read": "Conclusion",
+      "status": "texte_integral_lu",
+      "date": "2026-09-12"
+    },
+    {
+      "url": "https://threejs-journey.com/lessons/webgpu-tsl/instances",
+      "text_characters": 51458,
+      "last_section_read": "When to use what?",
+      "status": "texte_integral_lu",
+      "date": "2026-09-12"
+    },
+    {
+      "url": "https://threejs-journey.com/lessons/webgpu-tsl/magic-explosions",
+      "text_characters": 44916,
+      "last_section_read": "Conclusion",
+      "status": "texte_integral_lu",
+      "date": "2026-09-12"
+    },
+    {
+      "url": "https://threejs-journey.com/lessons/webgpu-tsl/sprites",
+      "text_characters": 13108,
+      "last_section_read": "Conclusion 31:21",
+      "status": "texte_integral_lu",
+      "date": "2026-09-12"
+    },
+    {
+      "url": "https://threejs-journey.com/lessons/webgpu-tsl/galaxy",
+      "text_characters": 24400,
+      "last_section_read": "Conclusion 55:38",
+      "status": "texte_integral_lu",
+      "date": "2026-09-12"
+    },
+    {
+      "url": "https://threejs-journey.com/lessons/webgpu-tsl/anvil",
+      "text_characters": 37202,
+      "last_section_read": "Conclusion 01:25:28",
+      "status": "texte_integral_lu",
+      "date": "2026-09-12"
+    },
+    {
+      "url": "https://threejs-journey.com/lessons/webgpu-tsl/clair-obscur-title",
+      "text_characters": 34859,
+      "last_section_read": "Conclusion 01:13:24",
+      "status": "texte_integral_lu",
+      "date": "2026-09-12"
+    },
+    {
+      "url": "https://threejs-journey.com/lessons/webgpu-tsl/sphere-particles-physics",
+      "text_characters": 54291,
+      "last_section_read": "Conclusion 01:38:10",
+      "status": "texte_integral_lu",
+      "date": "2026-09-12"
+    },
+    {
+      "url": "https://threejs-journey.com/lessons/webgpu-tsl/stylized-nature-scene",
+      "text_characters": 70811,
+      "last_section_read": "Conclusion 02:24:35",
+      "status": "texte_integral_lu",
+      "date": "2026-09-12"
+    },
+    {
+      "url": "https://threejs-journey.com/lessons/webgpu-tsl/snow",
+      "text_characters": 39281,
+      "last_section_read": "Conclusion 01:32:53",
+      "status": "texte_integral_lu",
+      "date": "2026-09-12"
+    }
+  ]
+}

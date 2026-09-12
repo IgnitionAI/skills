@@ -1,0 +1,4 @@
+interface:
+  display_name: "Expertise Web 3D"
+  short_description: "Créer et optimiser des expériences web 3D"
+  default_prompt: "Utilise $web-3d-expert pour concevoir et réaliser une expérience web 3D interactive adaptée à mon projet."
